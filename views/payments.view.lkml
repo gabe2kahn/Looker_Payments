@@ -35,7 +35,7 @@ view: payments {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."LAST_STATUS_UPDATE_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."LAST_STATUS_UPDATE_TS" ;;
   }
 
   dimension_group: last_update_ts {
@@ -79,7 +79,7 @@ view: payments {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."PAYMENT_INITIATED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."PAYMENT_INITIATED_TS" ;;
   }
 
   dimension_group: payment_posted_ts {
@@ -93,7 +93,7 @@ view: payments {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."PAYMENT_POSTED_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."PAYMENT_POSTED_TS";;
   }
 
   dimension_group: payment_scheduled_at_ts {
@@ -107,7 +107,7 @@ view: payments {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."PAYMENT_SCHEDULED_AT_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."PAYMENT_SCHEDULED_AT_TS" ;;
   }
 
   dimension_group: payment_scheduled_for_ts {
@@ -121,7 +121,7 @@ view: payments {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."PAYMENT_SCHEDULED_FOR_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."PAYMENT_SCHEDULED_FOR_TS" ;;
   }
 
   dimension: payment_source_id {
@@ -189,8 +189,54 @@ view: payments {
     sql: ${TABLE}."USER_ID" ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: [processor_payment_id, payments.processor_payment_id, payments.count]
+  measure: payments {
+    type: count_distinct
+    sql: ${payment_id} ;;
   }
+
+  measure: failed_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_status} = "failed" THEN ${payment_id} END;;
+  }
+
+  measure: average_time_to_payment_failure {
+    type: average
+    sql: CASE WHEN ${payment_status} = "failed" THEN DATEDIFF(days,${payment_scheduled_for_ts_date},${last_status_update_ts_date}) END;;
+  }
+
+  measure: average_successful_payment_amount {
+    type: average
+    sql: CASE WHEN ${payment_status} = "succeeded" THEN payment_amount END ;;
+  }
+
+  measure: sum_successful_payment_amount {
+    type: sum
+    sql: CASE WHEN ${payment_status} = "succeeded" THEN payment_amount END ;;
+  }
+
+  measure: average_failed_payment_amount {
+    type: average
+    sql: CASE WHEN ${payment_status} = "failed" THEN payment_amount END ;;
+  }
+
+  measure: average_time_to_first_successful_payment {
+    type: average
+    sql: CASE WHEN ${payment_status} = "succeeded" THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
+  }
+
+  measure: average_time_to_first_failed_payment {
+    type: average
+    sql: CASE WHEN ${payment_status} = "failed" THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
+  }
+
+  measure: users_with_failed_payment {
+    type: count_distinct
+    sql: CASE WHEN ${payment_status} = "failed" THEN ${user_id} END ;;
+  }
+
+  measure: payment_failure_rate {
+    type: number
+    sql: ${failed_payments} / ${payments};;
+  }
+
 }
