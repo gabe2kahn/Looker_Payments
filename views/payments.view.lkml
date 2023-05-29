@@ -202,31 +202,37 @@ view: payments {
   measure: average_time_to_payment_failure {
     type: average
     sql: CASE WHEN ${payment_status} = "failed" THEN DATEDIFF(days,${payment_scheduled_for_ts_date},${last_status_update_ts_date}) END;;
+    value_format_name: decimal_1
   }
 
   measure: average_successful_payment_amount {
     type: average
     sql: CASE WHEN ${payment_status} = "succeeded" THEN payment_amount END ;;
+    value_format_name: usd
   }
 
   measure: sum_successful_payment_amount {
     type: sum
     sql: CASE WHEN ${payment_status} = "succeeded" THEN payment_amount END ;;
+    value_format_name: usd_0
   }
 
   measure: average_failed_payment_amount {
     type: average
     sql: CASE WHEN ${payment_status} = "failed" THEN payment_amount END ;;
+    value_format_name: usd
   }
 
   measure: average_time_to_first_successful_payment {
     type: average
     sql: CASE WHEN ${payment_status} = "succeeded" THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
+    value_format_name: decimal_1
   }
 
   measure: average_time_to_first_failed_payment {
     type: average
     sql: CASE WHEN ${payment_status} = "failed" THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
+    value_format_name: decimal_1
   }
 
   measure: users_with_failed_payment {
@@ -237,6 +243,7 @@ view: payments {
   measure: payment_failure_rate {
     type: number
     sql: ${failed_payments} / ${payments};;
+    value_format_name: percent_1
   }
 
 }
