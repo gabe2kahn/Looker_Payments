@@ -196,48 +196,48 @@ view: payments {
 
   measure: failed_payments {
     type: count_distinct
-    sql: CASE WHEN ${payment_status} = "failed" THEN ${payment_id} END;;
+    sql: CASE WHEN ${payment_status} = 'failed' THEN ${payment_id} END;;
   }
 
   measure: average_time_to_payment_failure {
     type: average
-    sql: CASE WHEN ${payment_status} = "failed" THEN DATEDIFF(days,${payment_scheduled_for_ts_date},${last_status_update_ts_date}) END;;
+    sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${payment_scheduled_for_ts_date},${last_status_update_ts_date}) END;;
     value_format_name: decimal_1
   }
 
   measure: average_successful_payment_amount {
     type: average
-    sql: CASE WHEN ${payment_status} = "succeeded" THEN payment_amount END ;;
+    sql: CASE WHEN ${payment_status} = 'succeeded' THEN payment_amount END ;;
     value_format_name: usd
   }
 
   measure: sum_successful_payment_amount {
     type: sum
-    sql: CASE WHEN ${payment_status} = "succeeded" THEN payment_amount END ;;
+    sql: CASE WHEN ${payment_status} = 'succeeded' THEN payment_amount END ;;
     value_format_name: usd_0
   }
 
   measure: average_failed_payment_amount {
     type: average
-    sql: CASE WHEN ${payment_status} = "failed" THEN payment_amount END ;;
+    sql: CASE WHEN ${payment_status} = 'failed' THEN payment_amount END ;;
     value_format_name: usd
   }
 
   measure: average_time_to_first_successful_payment {
     type: average
-    sql: CASE WHEN ${payment_status} = "succeeded" THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
+    sql: CASE WHEN ${payment_status} = 'succeeded' THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
     value_format_name: decimal_1
   }
 
   measure: average_time_to_first_failed_payment {
     type: average
-    sql: CASE WHEN ${payment_status} = "failed" THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
+    sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
     value_format_name: decimal_1
   }
 
   measure: users_with_failed_payment {
     type: count_distinct
-    sql: CASE WHEN ${payment_status} = "failed" THEN ${user_id} END ;;
+    sql: CASE WHEN ${payment_status} = 'failed' THEN ${user_id} END ;;
   }
 
   measure: payment_failure_rate {
