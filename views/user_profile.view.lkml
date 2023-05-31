@@ -26,6 +26,12 @@ view: user_profile {
     sql: ${TABLE}."APPROVAL_TEST_IND" ;;
   }
 
+  dimension: arro_risk_model_1_score {
+    type: number
+    sql: ${TABLE}."ARRO_RISK_MODEL_1_SCORE" ;;
+    value_format_name: decimal_4
+  }
+
   dimension_group: card_creation_ts {
     type: time
     timeframes: [
@@ -67,6 +73,12 @@ view: user_profile {
   dimension: current_credit_limit {
     type: string
     sql: ${TABLE}."CURRENT_CREDIT_LIMIT" ;;
+  }
+
+  dimension: highest_socure_fraud_risk_score {
+    type: number
+    sql: ${TABLE}."HIGHEST_SOCURE_FRAUD_RISK_SCORE" ;;
+    value_format_name: decimal_4
   }
 
   dimension: initial_base_interest_rate {
