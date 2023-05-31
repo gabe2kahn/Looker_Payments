@@ -55,6 +55,7 @@ view: payments {
   dimension: payment_amount {
     type: number
     sql: ${TABLE}."PAYMENT_AMOUNT" ;;
+    value_format_name: usd
   }
 
   dimension: payment_hold_days {
