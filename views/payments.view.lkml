@@ -188,6 +188,10 @@ view: payments {
   dimension: user_id {
     type: string
     sql: ${TABLE}."USER_ID" ;;
+    link: {
+      label: "Performance Details by User ID"
+      url: "https://arro.cloud.looker.com/dashboards/9?User+ID={{ ['payments.user_id'] | url_encode }}"
+    }
   }
 
   measure: payments {
