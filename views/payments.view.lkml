@@ -99,7 +99,7 @@ view: payments {
 
   dimension: payment_ratio {
     type: number
-    sql: ${payment_amount}/${snapshot_pt.outstanding_balance} ;;
+    sql: ${payment_amount}/NULLIF(${snapshot_pt.outstanding_balance},0) ;;
     value_format_name: percent_1
   }
 
