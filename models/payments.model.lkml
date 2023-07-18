@@ -21,7 +21,7 @@ explore: payments {
   join: snapshot_pt {
     type: inner
     sql_on: ${payments.user_id} = ${snapshot_pt.user_id}
-      and ${payments.payment_initiated_ts_date} = ${snapshot_pt.snap_date_date};;
+      and ${payments.payment_initiated_ts_date} = DATEADD(DAYS,-1,${snapshot_pt.snap_date_date});;
     relationship: one_to_one
   }
 
