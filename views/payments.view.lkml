@@ -97,12 +97,6 @@ view: payments {
     sql: ${TABLE}."PAYMENT_POSTED_TS";;
   }
 
-  dimension: payment_ratio {
-    type: number
-    sql: ${payment_amount}/NULLIF(${snapshot_pt.outstanding_balance},0) ;;
-    value_format_name: percent_1
-  }
-
   dimension_group: payment_scheduled_at_ts {
     type: time
     timeframes: [
@@ -254,12 +248,6 @@ view: payments {
   measure: payment_failure_rate {
     type: number
     sql: ${failed_payments} / ${payments};;
-    value_format_name: percent_1
-  }
-
-  measure: average_payment_ratio {
-    type: average
-    sql: ${payment_ratio};;
     value_format_name: percent_1
   }
 
