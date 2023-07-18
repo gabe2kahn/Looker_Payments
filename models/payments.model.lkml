@@ -18,6 +18,14 @@ explore: payments {
     relationship: one_to_many
   }
 
+  join: snapshot_pt {
+    type: inner
+    sql_on: ${payments.user_id} = ${snapshot_pt.user_id}
+      and ${payments.payment_initiated_ts_date} = ${snapshot_pt.snap_date_date};;
+    relationship: one_to_one
+  }
+
+
   always_filter: {
     filters: [payments.payment_scheduled_at_ts_date: "after 1 month ago", user_profile.testing_stage: "Rollout"]
   }
