@@ -245,6 +245,11 @@ view: payments {
     sql: CASE WHEN ${payment_status} = 'failed' THEN ${user_id} END ;;
   }
 
+  measure: users_with_successful_payment {
+    type: count_distinct
+    sql: CASE WHEN ${payment_status} = 'succeeded' THEN ${user_id} END ;;
+  }
+
   measure: payment_failure_rate {
     type: number
     sql: ${failed_payments} / ${payments};;
