@@ -204,6 +204,16 @@ view: payments {
     sql: CASE WHEN ${payment_status} = 'failed' THEN ${payment_id} END;;
   }
 
+  measure: successful_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_status} = 'succeeded' THEN ${payment_id} END;;
+  }
+
+  measure: pending_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_status} = 'pending' THEN ${payment_id} END;;
+  }
+
   measure: average_time_to_payment_failure {
     type: average
     sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${payment_scheduled_for_ts_date},${last_status_update_ts_date}) END;;
