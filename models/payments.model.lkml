@@ -19,6 +19,6 @@ explore: payments {
   }
 
   always_filter: {
-    filters: [payments.payment_scheduled_at_ts_date: "after 1 month ago", user_profile.testing_stage: "Rollout"]
+    filters: [payments.payment_initiated_ts_date: "after 1 month ago", user_profile.testing_stage: "Rollout"]
   }
 }
