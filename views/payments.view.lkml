@@ -80,10 +80,8 @@ view: payments {
     type: string
     sql: CASE
       WHEN ${account_available_balance_to_payment_amount_ratio} < 1 THEN 'a. < 1'
-      WHEN ${account_available_balance_to_payment_amount_ratio} <= 1.2 THEN 'b. 1-1.2'
-      WHEN ${account_available_balance_to_payment_amount_ratio} <= 1.5 THEN 'c. 1.2-1.5'
-      WHEN ${account_available_balance_to_payment_amount_ratio} <= 2 THEN 'd. 1.5-2'
-      WHEN ${account_available_balance_to_payment_amount_ratio} > 2 THEN 'e. 2+'
+      WHEN ${account_available_balance_to_payment_amount_ratio} <= 2 THEN 'b. 1-2'
+      WHEN ${account_available_balance_to_payment_amount_ratio} > 2 THEN 'c. 2+'
     END ;;
   }
 
