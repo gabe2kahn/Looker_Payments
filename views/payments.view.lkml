@@ -58,6 +58,35 @@ view: payments {
     value_format_name: usd
   }
 
+  dimension: payment_account_current_balance {
+    type: number
+    sql: ${TABLE}."PAYMENT_ACCOUNT_CURRENT_BALANCE" ;;
+    value_format_name: usd
+  }
+
+  dimension: payment_account_available_balance {
+    type: number
+    sql: ${TABLE}."PAYMENT_ACCOUNT_AVAILABLE_BALANCE" ;;
+    value_format_name: usd
+  }
+
+  dimension: account_available_balance_to_payment_amount_ratio {
+    type: number
+    sql:  ${payment_account_available_balance} / ${payment_amount} ;;
+    value_format_name: percent_1
+  }
+
+  dimension: account_available_balance_to_payment_amount_bucket {
+    type: string
+    sql: CASE
+      WHEN ${account_available_balance_to_payment_amount_ratio} < 1 THEN 'a. < 1'
+      WHEN ${account_available_balance_to_payment_amount_ratio} <= 1.2 THEN 'b. 1-1.2'
+      WHEN ${account_available_balance_to_payment_amount_ratio} <= 1.5 THEN 'c. 1.2-1.5'
+      WHEN ${account_available_balance_to_payment_amount_ratio} <= 2 THEN 'd. 1.5-2'
+      WHEN ${account_available_balance_to_payment_amount_ratio} > 2 THEN 'e. 2+'
+    END ;;
+  }
+
   dimension: payment_hold_days {
     type: number
     sql: ${TABLE}."PAYMENT_HOLD_DAYS" ;;
