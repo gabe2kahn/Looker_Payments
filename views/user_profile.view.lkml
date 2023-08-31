@@ -32,6 +32,18 @@ view: user_profile {
     value_format_name: decimal_4
   }
 
+  dimension: arm1_bucket {
+    type: string
+    sql: CASE
+      WHEN ${arro_risk_model_1_score} BETWEEN 0 and 0.05 THEN 'a. 0-5'
+      WHEN ${arro_risk_model_1_score} BETWEEN 0.05 and 0.1 THEN 'b. 5-10'
+      WHEN ${arro_risk_model_1_score} BETWEEN 0.1 and 0.15 THEN 'c. 10-15'
+      WHEN ${arro_risk_model_1_score} BETWEEN 0.15 and 0.2 THEN 'd. 15-20'
+      WHEN ${arro_risk_model_1_score} BETWEEN 0.2 and 0.32 THEN 'e. 20-32'
+      WHEN ${arro_risk_model_1_score} > 0.32 THEN 'f. 32+'
+    END ;;
+  }
+
   dimension_group: card_creation_ts {
     type: time
     timeframes: [
