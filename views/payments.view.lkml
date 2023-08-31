@@ -226,6 +226,11 @@ view: payments {
     sql: ${payment_id} ;;
   }
 
+  measure: completed_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_status} IN ('failed','succeeded') THEN ${payment_id} END ;;
+  }
+
   measure: failed_payments {
     type: count_distinct
     sql: CASE WHEN ${payment_status} = 'failed' THEN ${payment_id} END;;
@@ -289,7 +294,7 @@ view: payments {
 
   measure: payment_failure_rate {
     type: number
-    sql: ${failed_payments} / ${payments};;
+    sql: ${failed_payments} / ${completed_payments};;
     value_format_name: percent_1
   }
 
