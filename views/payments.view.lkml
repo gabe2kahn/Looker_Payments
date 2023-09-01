@@ -294,7 +294,7 @@ view: payments {
 
   measure: payment_failure_rate {
     type: number
-    sql: NULLIF(${failed_payments} / ${completed_payments},0);;
+    sql: ${failed_payments} / NULLIF(${completed_payments},0);;
     value_format_name: percent_1
   }
 
