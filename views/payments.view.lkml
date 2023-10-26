@@ -4,7 +4,6 @@ view: payments {
   drill_fields: [processor_payment_id]
 
   dimension: processor_payment_id {
-    primary_key: yes
     type: string
     sql: ${TABLE}."PROCESSOR_PAYMENT_ID" ;;
   }
@@ -244,6 +243,16 @@ view: payments {
   measure: pending_payments {
     type: count_distinct
     sql: CASE WHEN ${payment_status} = 'pending' THEN ${payment_id} END;;
+  }
+
+  measure: rescheduled_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_status} = 'rescheduled' THEN ${payment_id} END;;
+  }
+
+  measure: balance_check_canceled_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_status} = 'canceled - balance check' THEN ${payment_id} END;;
   }
 
   measure: average_time_to_payment_failure {
