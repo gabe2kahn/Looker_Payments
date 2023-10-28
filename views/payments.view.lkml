@@ -123,6 +123,34 @@ view: payments {
     sql: ${TABLE}."PAYMENT_POSTED_TS";;
   }
 
+  dimension_group: payment_rescheduled_at_ts {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."PAYMENT_RESCHEDULED_AT_TS" ;;
+  }
+
+  dimension_group: payment_rescheduled_for_ts {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."PAYMENT_RESCHEDULED_FOR_TS" ;;
+  }
+
   dimension_group: payment_scheduled_at_ts {
     type: time
     timeframes: [
