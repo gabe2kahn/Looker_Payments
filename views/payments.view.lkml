@@ -194,6 +194,16 @@ view: payments {
     sql: ${TABLE}."PAYMENT_TYPE" ;;
   }
 
+  dimension: plaid_processor_token {
+    type: string
+    sql: ${TABLE}."PLAID_PROCESSOR_TOKEN" ;;
+  }
+
+  dimension: plaid_processor_token_valid {
+    type: yesno
+    sql: ${plaid_processor_token} IS NOT NULL ;;
+  }
+
   dimension: processor {
     type: string
     sql: ${TABLE}."PROCESSOR" ;;
@@ -332,6 +342,12 @@ view: payments {
   measure: payment_failure_rate {
     type: number
     sql: ${failed_payments} / NULLIF(${completed_payments},0);;
+    value_format_name: percent_1
+  }
+
+  measure: plaid_processor_token_valid_rate {
+    type: number
+    sql: SUM(CASE WHEN ${plaid_processor_token_valid} = 'Yes' THEN 1 END)/COUNT(DISTINCT ${payment_id}) ;;
     value_format_name: percent_1
   }
 
