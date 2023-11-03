@@ -290,7 +290,7 @@ view: payments {
 
   measure: balance_check_canceled_payments {
     type: count_distinct
-    sql: CASE WHEN ${payment_status} = 'canceled - balance check' THEN ${payment_id} END;;
+    sql: CASE WHEN ${payment_status} = 'canceled-for-balance' THEN ${payment_id} END;;
   }
 
   measure: average_time_to_payment_failure {
