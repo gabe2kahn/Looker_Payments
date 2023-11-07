@@ -106,7 +106,7 @@ view: payments {
       quarter,
       year
     ]
-    sql: CAST(${TABLE}."PAYMENT_INITIATED_TS" AS TIMEZONE_NTZ) ;;
+    sql: CAST(${TABLE}."PAYMENT_INITIATED_TS" AS TIMESTAMP_NTZ) ;;
   }
 
   dimension_group: payment_posted_ts {
