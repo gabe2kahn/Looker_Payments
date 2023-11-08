@@ -37,6 +37,11 @@ view: payments {
     sql: ${TABLE}."LAST_STATUS_UPDATE_TS" ;;
   }
 
+  dimension: last_status_update_date_name {
+    type: string
+    sql: dayname(${last_status_update_ts_date});;
+  }
+
   dimension_group: last_update_ts {
     type: time
     timeframes: [
@@ -107,6 +112,11 @@ view: payments {
       year
     ]
     sql: CAST(${TABLE}."PAYMENT_INITIATED_TS" AS TIMESTAMP_NTZ) ;;
+  }
+
+  dimension: payment_initiated_date_name {
+    type: string
+    sql: dayname(${payment_initiated_ts_date});;
   }
 
   dimension_group: payment_posted_ts {
