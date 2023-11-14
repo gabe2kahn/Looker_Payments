@@ -326,7 +326,7 @@ view: payments {
     value_format_name: decimal_1
   }
 
-  measure: average_calendar_to_payment_failure {
+  measure: average_calendar_days_to_payment_failure {
     type: average
     sql: ${calendar_days_to_payment_failure};;
     value_format_name: decimal_1
