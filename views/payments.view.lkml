@@ -34,6 +34,11 @@ view: payments {
     value_format_name: decimal_0
   }
 
+  dimension: calendar_days_to_payment_failure_bucket {
+    type: string
+    sql: CASE WHEN ${calendar_days_to_payment_failure} > 3 THEN '4+' ELSE ${calendar_days_to_payment_failure} END ;;
+  }
+
   dimension: days_to_payment_failure {
     type: number
     sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${payment_initiated_ts_date},${last_status_update_ts_date}) END;;
