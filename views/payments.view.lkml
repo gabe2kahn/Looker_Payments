@@ -23,7 +23,7 @@ view: payments {
     sql: ${TABLE}."CARD_ID" ;;
   }
 
-  dimension: calendar_days_to_payment_failure {
+  dimension: business_days_to_payment_failure {
     type: number
     sql: CASE WHEN ${payment_status} = 'failed' THEN (
       DATEDIFF(DAY, COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date}),${last_status_update_ts_date})
@@ -34,9 +34,9 @@ view: payments {
     value_format_name: decimal_0
   }
 
-  dimension: calendar_days_to_payment_failure_bucket {
+  dimension: business_days_to_payment_failure_bucket {
     type: string
-    sql: CASE WHEN ${calendar_days_to_payment_failure} > 3 THEN '4+' ELSE CAST(${calendar_days_to_payment_failure} AS STRING) END ;;
+    sql: CASE WHEN ${business_days_to_payment_failure} > 3 THEN '4+' ELSE CAST(${business_days_to_payment_failure} AS STRING) END ;;
   }
 
   dimension: days_to_payment_failure {
@@ -347,9 +347,9 @@ view: payments {
     value_format_name: decimal_1
   }
 
-  measure: average_calendar_days_to_payment_failure {
+  measure: average_business_days_to_payment_failure {
     type: average
-    sql: ${calendar_days_to_payment_failure};;
+    sql: ${business_days_to_payment_failure};;
     value_format_name: decimal_1
   }
 
