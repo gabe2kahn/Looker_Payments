@@ -30,7 +30,7 @@ view: payments {
     - DATEDIFF(WEEK, current_date, '2023-11-20')*2
     - (CASE WHEN DAYNAME(current_date) != 'Sun' THEN 1 ELSE 0 END)
     + (CASE WHEN DAYNAME('2023-11-20') != 'Sat' THEN 1 ELSE 0 END)
-    ) ;;
+    END) ;;
     value_format_name: decimal_0
   }
 
