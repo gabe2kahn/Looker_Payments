@@ -26,10 +26,10 @@ view: payments {
   dimension: calendar_days_to_payment_failure {
     type: number
     sql: CASE WHEN ${payment_status} = 'failed' THEN (
-      DATEDIFF(DAY, 'current_date', '2023-11-20')
-    - DATEDIFF(WEEK, current_date, '2023-11-20')*2
-    - (CASE WHEN DAYNAME(current_date) != 'Sun' THEN 1 ELSE 0 END)
-    + (CASE WHEN DAYNAME('2023-11-20') != 'Sat' THEN 1 ELSE 0 END)
+      DATEDIFF(DAY, ${payment_initiated_ts_date},${last_status_update_ts_date})
+    - DATEDIFF(WEEK, ${payment_initiated_ts_date}, ${last_status_update_ts_date})*2
+    - (CASE WHEN DAYNAME(${payment_initiated_ts_date}) != 'Sun' THEN 1 ELSE 0 END)
+    + (CASE WHEN DAYNAME(${last_status_update_ts_date}) != 'Sat' THEN 1 ELSE 0 END)
     ) END ;;
     value_format_name: decimal_0
   }
