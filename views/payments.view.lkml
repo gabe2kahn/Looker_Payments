@@ -26,9 +26,9 @@ view: payments {
   dimension: calendar_days_to_payment_failure {
     type: number
     sql: CASE WHEN ${payment_status} = 'failed' THEN (
-      DATEDIFF(DAY, ${payment_initiated_ts_date},${last_status_update_ts_date})
-    - DATEDIFF(WEEK, ${payment_initiated_ts_date}, ${last_status_update_ts_date})*2
-    - (CASE WHEN DAYNAME(${payment_initiated_ts_date}) != 'Sun' THEN 1 ELSE 0 END)
+      DATEDIFF(DAY, COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date}),${last_status_update_ts_date})
+    - DATEDIFF(WEEK, COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date}), ${last_status_update_ts_date})*2
+    - (CASE WHEN DAYNAME(COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date})) != 'Sun' THEN 1 ELSE 0 END)
     + (CASE WHEN DAYNAME(${last_status_update_ts_date}) != 'Sat' THEN 1 ELSE 0 END)
     ) END ;;
     value_format_name: decimal_0
@@ -41,7 +41,8 @@ view: payments {
 
   dimension: days_to_payment_failure {
     type: number
-    sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${payment_initiated_ts_date},${last_status_update_ts_date}) END;;
+    sql: CASE WHEN ${payment_status} = 'failed' THEN
+      DATEDIFF(days,COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date}),${last_status_update_ts_date}) END;;
     value_format_name: decimal_0
   }
 
@@ -135,6 +136,21 @@ view: payments {
     ]
     sql: CAST(${TABLE}."PAYMENT_INITIATED_TS" AS TIMESTAMP_NTZ) ;;
   }
+
+  dimension_group: payment_initiated_by_galileo_ts {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: CAST(${TABLE}."PAYMENT_INITIATED_BY_GALILEO_TS" AS TIMESTAMP_NTZ) ;;
+  }
+
 
   dimension: payment_initiated_date_name {
     type: string
