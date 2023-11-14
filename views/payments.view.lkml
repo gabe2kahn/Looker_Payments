@@ -23,6 +23,23 @@ view: payments {
     sql: ${TABLE}."CARD_ID" ;;
   }
 
+  dimension: calendar_days_to_payment_failure {
+    type: number
+    sql: CASE WHEN ${payment_status} = 'failed' THEN (
+      DATEDIFF(DAY, 'current_date', '2023-11-20')
+    - DATEDIFF(WEEK, current_date, '2023-11-20')*2
+    - (CASE WHEN DAYNAME(current_date) != 'Sun' THEN 1 ELSE 0 END)
+    + (CASE WHEN DAYNAME('2023-11-20') != 'Sat' THEN 1 ELSE 0 END)
+    ) ;;
+    value_format_name: decimal_0
+  }
+
+  dimension: days_to_payment_failure {
+    type: number
+    sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${payment_initiated_ts_date},${last_status_update_ts_date}) END;;
+    value_format_name: decimal_0
+  }
+
   dimension_group: last_status_update_ts {
     type: time
     timeframes: [
@@ -303,9 +320,15 @@ view: payments {
     sql: CASE WHEN ${payment_status} = 'canceled-for-balance' THEN ${payment_id} END;;
   }
 
-  measure: average_time_to_payment_failure {
+  measure: average_days_to_payment_failure {
     type: average
-    sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${payment_scheduled_for_ts_date},${last_status_update_ts_date}) END;;
+    sql: ${days_to_payment_failure};;
+    value_format_name: decimal_1
+  }
+
+  measure: average_calendar_to_payment_failure {
+    type: average
+    sql: ${calendar_days_to_payment_failure};;
     value_format_name: decimal_1
   }
 
