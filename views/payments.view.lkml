@@ -36,7 +36,7 @@ view: payments {
 
   dimension: calendar_days_to_payment_failure_bucket {
     type: string
-    sql: CASE WHEN ${calendar_days_to_payment_failure} > 3 THEN '4+' ELSE ${calendar_days_to_payment_failure} END ;;
+    sql: CASE WHEN ${calendar_days_to_payment_failure} > 3 THEN '4+' ELSE CAST(${calendar_days_to_payment_failure} AS STRING) END ;;
   }
 
   dimension: days_to_payment_failure {
