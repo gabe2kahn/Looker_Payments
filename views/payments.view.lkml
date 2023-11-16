@@ -399,6 +399,12 @@ view: payments {
     value_format_name: percent_1
   }
 
+  measure: payment_success_rate {
+    type: number
+    sql: ${successful_payments} / NULLIF(${completed_payments} + ${balance_check_canceled_payments},0);;
+    value_format_name: percent_1
+  }
+
   measure: plaid_processor_token_valid_rate {
     type: number
     sql: SUM(CASE WHEN ${plaid_processor_token_valid} = 'Yes' THEN 1 END)/COUNT(DISTINCT ${payment_id}) ;;
