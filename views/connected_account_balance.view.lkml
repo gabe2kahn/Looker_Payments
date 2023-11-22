@@ -61,14 +61,14 @@ view: connected_account_balance {
     sql: ${sync_id} ;;
   }
 
-  measure: users_with_sync_in_last_day {
+  measure: users_with_recent_sync {
     type: count_distinct
-    sql: CASE WHEN ${balance_update_ts_date} >= DATEADD(DAYS,-1,${snapshot_pt.snap_date}) THEN ${user_id} END ;;
+    sql: CASE WHEN ${balance_update_ts_date} >= DATEADD(DAYS,-3,${snapshot_pt.snap_date}) THEN ${user_id} END ;;
   }
 
-  measure: users_with_sync_in_last_day_rate {
+  measure: users_with_recent_sync_rate {
     type: number
-    sql: ${users_with_sync_in_last_day}/ NULLIF(${snapshot_pt.open_accounts},0) ;;
+    sql: ${users_with_recent_sync}/ NULLIF(${snapshot_pt.open_accounts},0) ;;
     value_format_name: percent_1
   }
 }
