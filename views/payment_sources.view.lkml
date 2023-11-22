@@ -96,7 +96,7 @@ view: payment_sources {
 
   measure: user_active_access_token_rate {
     type: number
-    sql: ${active_access_token_users} / ${users};;
+    sql: ${active_access_token_users} / ${snapshot_pt.open_accounts};;
     value_format_name: percent_1
   }
 
