@@ -102,7 +102,7 @@ view: payment_sources {
 
   measure: user_no_payment_source_rate {
     type: number
-    sql: ${users} / ${user_profile.open_accounts};;
+    sql: ${users} / ${snapshot_pt.open_accounts};;
     value_format_name: decimal_1
   }
 }

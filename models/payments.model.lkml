@@ -24,17 +24,20 @@ explore: payments {
 }
 
 explore: payment_sources {
-  join: user_profile {
+  join: snapshot_pt {
     type: full_outer
-    sql_on: ${payment_sources.user_id} = ${user_profile.user_id} ;;
-    relationship: many_to_one
+    sql_on: ${payment_sources.user_id} = ${snapshot_pt.user_id}
+      and ${payment_sources.source_created_ts_date} >= ${snapshot_pt.snap_date}
+      and COALESCE(${payment_sources.source_deleted_ts_date},'2999-12-31') < ${snapshot_pt.snap_date};;
+    relationship: many_to_many
   }
 }
 
 explore: connected_account_balance {
-  join: user_profile {
+  join: snapshot_pt {
     type: full_outer
-    sql_on: ${connected_account_balance.user_id} = ${user_profile.user_id} ;;
-    relationship: many_to_one
+    sql_on: ${connected_account_balance.user_id} = ${snapshot_pt.user_id}
+      and ${connected_account_balance.balance_update_ts_date} between DATEADD(DAYS,-1,${snapshot_pt.snap_date}) AND ${snapshot_pt.snap_date};;
+    relationship: many_to_many
   }
 }
