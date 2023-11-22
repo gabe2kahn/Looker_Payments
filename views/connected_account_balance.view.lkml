@@ -63,7 +63,7 @@ view: connected_account_balance {
 
   measure: users_with_sync_in_last_day {
     type: count_distinct
-    sql: CASE WHEN ${balance_update_ts_date} >= DATEADD(DAYS,-1,current_date) THEN ${user_id} END ;;
+    sql: CASE WHEN ${balance_update_ts_date} >= DATEADD(DAYS,-1,${snapshot_pt.snap_date}) THEN ${user_id} END ;;
   }
 
   measure: users_with_sync_in_last_day_rate {
