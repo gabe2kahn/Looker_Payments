@@ -22,3 +22,19 @@ explore: payments {
     filters: [payments.payment_initiated_ts_date: "after 1 month ago", user_profile.testing_stage: "Rollout"]
   }
 }
+
+explore: payment_sources {
+  join: user_profile {
+    type: inner
+    sql_on: ${payment_sources.user_id} = ${user_profile.user_id} ;;
+    relationship: many_to_one
+  }
+}
+
+explore: connected_account_balance {
+  join: user_profile {
+    type: inner
+    sql_on: ${connected_account_balance.user_id} = ${user_profile.user_id} ;;
+    relationship: many_to_one
+  }
+}

@@ -186,8 +186,8 @@ view: user_profile {
     sql: ${TABLE}."USER_ID" ;;
   }
 
-  measure: count {
-    type: count
-    drill_fields: []
+  measure: open_accounts {
+    type: count_distinct
+    sql: CASE WHEN coalesce(lower(${activity_status}),'current') != 'closed' THEN ${user_id} END ;;
   }
 }
