@@ -26,9 +26,7 @@ explore: payments {
 explore: payment_sources {
   join: snapshot_pt {
     type: full_outer
-    sql_on: ${payment_sources.user_id} = ${snapshot_pt.user_id}
-      and ${payment_sources.source_created_ts_date} >= ${snapshot_pt.snap_date}
-      and COALESCE(${payment_sources.source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date};;
+    sql_on: ${payment_sources.user_id} = ${snapshot_pt.user_id} ;;
     relationship: many_to_many
   }
 }

@@ -80,12 +80,16 @@ view: payment_sources {
 
   measure: active_access_token_payment_sources {
     type: count_distinct
-    sql: CASE WHEN ${access_token_active_ind} = 'TRUE' THEN ${payment_source_id} END ;;
+    sql: CASE WHEN ${access_token_active_ind} = 'TRUE'
+      and ${source_created_ts_date} >= ${snapshot_pt.snap_date}
+      and COALESCE(${source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date} THEN ${payment_source_id} END ;;
   }
 
   measure: active_access_token_users {
     type: count_distinct
-    sql: CASE WHEN ${access_token_active_ind} = 'TRUE' THEN ${user_id} END ;;
+    sql: CASE WHEN ${access_token_active_ind} = 'TRUE'
+      and ${source_created_ts_date} >= ${snapshot_pt.snap_date}
+      and COALESCE(${source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date} THEN ${user_id} END ;;
   }
 
   measure: payment_source_active_access_token_rate {
