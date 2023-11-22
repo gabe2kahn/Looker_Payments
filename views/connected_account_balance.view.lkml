@@ -20,7 +20,7 @@ view: connected_account_balance {
   dimension_group: balance_update_ts {
     type: time
     timeframes: [raw, time, date, week, month, quarter, year]
-    sql: CAST(${TABLE}."BALANCE_UPDATE_TS" AS TIMESTAMP_NTZ) ;;
+    sql: ${TABLE}."BALANCE_UPDATE_TS" ;;
   }
   dimension_group: insert_ts {
     type: time
