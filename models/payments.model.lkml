@@ -37,7 +37,7 @@ explore: connected_account_balance {
   join: snapshot_pt {
     type: full_outer
     sql_on: ${connected_account_balance.user_id} = ${snapshot_pt.user_id}
-      and ${connected_account_balance.balance_update_ts_date} between DATEADD(DAYS,-1,${snapshot_pt.snap_date}) AND ${snapshot_pt.snap_date};;
+      and ${connected_account_balance.balance_update_ts_date} between DATEADD(DAYS,-3,${snapshot_pt.snap_date}) AND ${snapshot_pt.snap_date};;
     relationship: many_to_many
   }
 }
