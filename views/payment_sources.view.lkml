@@ -90,19 +90,19 @@ view: payment_sources {
 
   measure: payment_source_active_access_token_rate {
     type: number
-    sql: ${active_access_token_payment_sources} / ${payment_sources};;
+    sql: ${active_access_token_payment_sources} / NULLIF(${payment_sources},0);;
     value_format_name: decimal_1
   }
 
   measure: user_active_access_token_rate {
     type: number
-    sql: ${active_access_token_users} / ${snapshot_pt.open_accounts};;
+    sql: ${active_access_token_users} / NULLIF(${snapshot_pt.open_accounts},0);;
     value_format_name: percent_1
   }
 
   measure: user_no_payment_source_rate {
     type: number
-    sql: ${users} / ${snapshot_pt.open_accounts};;
+    sql: ${users} / NULLIF(${snapshot_pt.open_accounts},0);;
     value_format_name: percent_1
   }
 }
