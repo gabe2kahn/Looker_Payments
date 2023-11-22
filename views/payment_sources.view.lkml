@@ -97,12 +97,12 @@ view: payment_sources {
   measure: user_active_access_token_rate {
     type: number
     sql: ${active_access_token_users} / ${users};;
-    value_format_name: decimal_1
+    value_format_name: percent_1
   }
 
   measure: user_no_payment_source_rate {
     type: number
     sql: ${users} / ${snapshot_pt.open_accounts};;
-    value_format_name: decimal_1
+    value_format_name: percent_1
   }
 }

@@ -69,5 +69,6 @@ view: connected_account_balance {
   measure: users_with_sync_in_last_day_rate {
     type: number
     sql: ${users_with_sync_in_last_day}/ NULLIF(${snapshot_pt.open_accounts},0) ;;
+    value_format_name: percent_1
   }
 }
