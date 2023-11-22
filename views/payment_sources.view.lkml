@@ -78,6 +78,12 @@ view: payment_sources {
     sql: ${payment_source_id} ;;
   }
 
+  measure: users_with_active_payment_source {
+    type: count_distinct
+    sql: CASE WHEN ${source_created_ts_date} <= ${snapshot_pt.snap_date}
+      and COALESCE(${source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date} THEN ${snapshot_pt.user_id} END ;;
+  }
+
   measure: active_access_token_payment_sources {
     type: count_distinct
     sql: CASE WHEN ${access_token_active_ind} = 'TRUE'
@@ -95,7 +101,7 @@ view: payment_sources {
   measure: payment_source_active_access_token_rate {
     type: number
     sql: ${active_access_token_payment_sources} / NULLIF(${payment_sources},0);;
-    value_format_name: decimal_1
+    value_format_name: percent_1
   }
 
   measure: user_active_access_token_rate {
@@ -106,7 +112,7 @@ view: payment_sources {
 
   measure: user_no_payment_source_rate {
     type: number
-    sql: ${users} / NULLIF(${snapshot_pt.open_accounts},0);;
+    sql: 1- ${users_with_active_payment_source} / NULLIF(${snapshot_pt.open_accounts},0);;
     value_format_name: percent_1
   }
 }
