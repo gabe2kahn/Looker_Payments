@@ -8,7 +8,7 @@ view: payment_sources {
     sql: ${TABLE}."PAYMENT_SOURCE_ID" ;;
   }
   dimension: access_token_active_ind {
-    type: yesno
+    type: string
     sql: ${TABLE}."ACCESS_TOKEN_ACTIVE_IND" ;;
   }
   dimension: account_balance {
