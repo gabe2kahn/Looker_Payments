@@ -29,6 +29,11 @@ explore: payment_sources {
     sql_on: ${payment_sources.user_id} = ${snapshot_pt.user_id} ;;
     relationship: many_to_many
   }
+  join: user_profile {
+    type: inner
+    sql_on: ${payment_sources.user_id} = ${user_profile.user_id} ;;
+    relationship: one_to_many
+  }
 }
 
 explore: connected_account_balance {

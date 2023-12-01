@@ -81,7 +81,8 @@ view: payment_sources {
   measure: users_with_active_payment_source {
     type: count_distinct
     sql: CASE WHEN ${source_created_ts_date} <= ${snapshot_pt.snap_date}
-      and COALESCE(${source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date} THEN ${user_id} END ;;
+      and COALESCE(${source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date} THEN ${user_id} END
+      and lower(${user_profile.activity_status}) != 'closed' ;;
   }
 
   measure: active_access_token_payment_sources {
@@ -94,7 +95,7 @@ view: payment_sources {
   measure: active_access_token_users {
     type: count_distinct
     sql: CASE WHEN ${access_token_active_ind} = 'TRUE'
-      and lower(${user_profile.activity_status != 'closed'})
+      and lower(${user_profile.activity_status}) != 'closed'
       and ${source_created_ts_date} <= ${snapshot_pt.snap_date}
       and COALESCE(${source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date} THEN ${user_id} END ;;
   }
