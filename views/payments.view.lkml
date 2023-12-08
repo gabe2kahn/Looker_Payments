@@ -46,6 +46,11 @@ view: payments {
     value_format_name: decimal_0
   }
 
+  dimension: failure_reason {
+    type: string
+    sql: ${TABLE}."FAILURE_REASON" ;;
+  }
+
   dimension_group: last_status_update_ts {
     type: time
     timeframes: [
