@@ -51,6 +51,11 @@ view: payments {
     sql: ${TABLE}."FAILURE_REASON" ;;
   }
 
+  dimension: failure_reason_detailed {
+    type: string
+    sql: ${TABLE}."FAILURE_REASON_DETAILED" ;;
+  }
+
   dimension_group: last_status_update_ts {
     type: time
     timeframes: [
