@@ -167,6 +167,15 @@ view: payments {
     sql: dayname(${payment_initiated_ts_date});;
   }
 
+  dimension: payment_method {
+    type: string
+    sql: CASE ${processor}
+      WHEN 'astra' THEN 'Debit'
+      WHEN 'peach' THEN 'ACH'
+      ELSE ${processor}
+    END;;
+  }
+
   dimension_group: payment_posted_ts {
     type: time
     timeframes: [
