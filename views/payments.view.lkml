@@ -430,4 +430,9 @@ view: payments {
     value_format_name: percent_1
   }
 
+  measure: debit_card_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_method} = 'Debit' THEN ${payment_id} END ;;
+  }
+
 }
