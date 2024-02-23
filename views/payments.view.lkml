@@ -204,18 +204,17 @@ view: payments {
     sql: ${TABLE}."PAYMENT_RESCHEDULED_AT_TS" ;;
   }
 
-  dimension_group: payment_rescheduled_for_ts {
+  dimension_group: payment_rescheduled_for_date {
     type: time
     timeframes: [
       raw,
-      time,
       date,
       week,
       month,
       quarter,
       year
     ]
-    sql: ${TABLE}."PAYMENT_RESCHEDULED_FOR_TS" ;;
+    sql: ${TABLE}."PAYMENT_RESCHEDULED_FOR_DATE" ;;
   }
 
   dimension_group: payment_scheduled_at_ts {
@@ -232,18 +231,17 @@ view: payments {
     sql: ${TABLE}."PAYMENT_SCHEDULED_AT_TS" ;;
   }
 
-  dimension_group: payment_scheduled_for_ts {
+  dimension_group: payment_scheduled_for_date {
     type: time
     timeframes: [
       raw,
-      time,
       date,
       week,
       month,
       quarter,
       year
     ]
-    sql: ${TABLE}."PAYMENT_SCHEDULED_FOR_TS" ;;
+    sql: ${TABLE}."PAYMENT_SCHEDULED_FOR_DATE" ;;
   }
 
   dimension: payment_source_id {
