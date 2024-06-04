@@ -48,7 +48,7 @@ view: payments {
 
   dimension: payment_initiated_day_of_month {
     type: number
-    sql: DAY(${payment_initiated_ts_date}) ;;
+    sql: DAY(${TABLE}."PAYMENT_INITIATED_TS") ;;
   }
 
   dimension: failure_reason {
