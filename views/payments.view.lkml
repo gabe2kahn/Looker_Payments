@@ -46,11 +46,6 @@ view: payments {
     value_format_name: decimal_0
   }
 
-  dimension: payment_initiated_day_of_month {
-    type: number
-    sql: DAY(${TABLE}."PAYMENT_INITIATED_TS") ;;
-  }
-
   dimension: failure_reason {
     type: string
     sql: ${TABLE}."FAILURE_REASON" ;;
@@ -170,6 +165,11 @@ view: payments {
   dimension: payment_initiated_date_name {
     type: string
     sql: dayname(${payment_initiated_ts_date});;
+  }
+
+  dimension: payment_initiated_day_of_month {
+    type: number
+    sql: DAY(${TABLE}."PAYMENT_INITIATED_TS") ;;
   }
 
   dimension: payment_method {
