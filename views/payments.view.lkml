@@ -177,6 +177,7 @@ view: payments {
     sql: CASE ${processor}
       WHEN 'astra' THEN 'Debit'
       WHEN 'peach' THEN 'ACH'
+      WHEN 'loanpro' THEN 'ACH'
       ELSE ${processor}
     END;;
   }
