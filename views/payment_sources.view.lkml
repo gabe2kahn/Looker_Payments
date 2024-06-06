@@ -78,6 +78,11 @@ view: payment_sources {
     sql: ${payment_source_id} ;;
   }
 
+  measure: active_payment_sources {
+    type: count_distinct
+    sql: CASE WHEN ${source_deleted_ts_date} IS NULL THEN ${payment_source_id} END ;;
+  }
+
   measure: users_with_active_payment_source {
     type: count_distinct
     sql: CASE WHEN ${source_created_ts_date} <= ${snapshot_pt.snap_date}
@@ -88,9 +93,11 @@ view: payment_sources {
 
   measure: active_access_token_payment_sources {
     type: count_distinct
-    sql: CASE WHEN ${access_token_active_ind} = 'TRUE'
-      and ${source_created_ts_date} <= ${snapshot_pt.snap_date}
-      and COALESCE(${source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date} THEN ${payment_source_id} END ;;
+    sql: CASE
+      WHEN ${access_token_active_ind} = 'TRUE'
+        and ${source_created_ts_date} <= ${snapshot_pt.snap_date}
+        and COALESCE(${source_deleted_ts_date},'3000-01-01') > ${snapshot_pt.snap_date}
+      THEN ${payment_source_id} END ;;
   }
 
   measure: active_access_token_users {
@@ -98,12 +105,13 @@ view: payment_sources {
     sql: CASE WHEN ${access_token_active_ind} = 'TRUE'
       and lower(${user_profile.activity_status}) != 'closed'
       and ${source_created_ts_date} <= ${snapshot_pt.snap_date}
-      and COALESCE(${source_deleted_ts_date},'1900-01-01') < ${snapshot_pt.snap_date} THEN ${user_id} END ;;
+      and COALESCE(${source_deleted_ts_date},'3000-01-01') > ${snapshot_pt.snap_date}
+      THEN ${user_id} END ;;
   }
 
   measure: payment_source_active_access_token_rate {
     type: number
-    sql: ${active_access_token_payment_sources} / NULLIF(${payment_sources},0);;
+    sql: ${active_access_token_payment_sources} / NULLIF(${active_payment_sources},0);;
     value_format_name: percent_1
   }
 
