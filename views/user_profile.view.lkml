@@ -62,6 +62,16 @@ view: user_profile {
     END ;;
   }
 
+  dimension: balance_check_type {
+    type: string
+    sql: ${TABLE}."BALANCE_CHECK_TYPE" ;;
+  }
+
+  dimension: balance_check_amount {
+    type: string
+    sql: ${TABLE}."BALANCE_CHECK_AMOUNT" ;;
+  }
+
   dimension_group: card_creation_ts {
     type: time
     timeframes: [
@@ -121,6 +131,20 @@ view: user_profile {
     sql: ${TABLE}."INITIAL_CREDIT_LIMIT" ;;
   }
 
+  dimension_group: last_balance_check {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."LAST_BALANCE_CHECK_TS" ;;
+  }
+
   dimension_group: last_physical_card_ship {
     type: time
     timeframes: [
@@ -157,6 +181,26 @@ view: user_profile {
   dimension: loan_id {
     type: string
     sql: ${TABLE}."LOAN_ID" ;;
+  }
+
+  dimension: partial_payment_ind {
+    type: yesno
+    sql: ${TABLE}."PARTIAL_PAYMENT_IND" ;;
+  }
+
+  dimension: plaid_risk_assessment {
+    type: yesno
+    sql: ${TABLE}."PLAID_RISK_ASSESSMENT" ;;
+  }
+
+  dimension: plaid_risk_reasons {
+    type: yesno
+    sql: ${TABLE}."PLAID_RISK_REASONS" ;;
+  }
+
+  dimension: plaid_risk_score {
+    type: number
+    sql: ${TABLE}."PLAID_RISK_SCORE" ;;
   }
 
   dimension: onboarded_ind {
