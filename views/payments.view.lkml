@@ -18,6 +18,16 @@ view: payments {
     sql: ${TABLE}."AUTO_PAYMENT_SCHEDULE_ID" ;;
   }
 
+  dimension: balance_check_type {
+    type: string
+    sql: ${TABLE}."BALANCE_CHECK_TYPE" ;;
+  }
+
+  dimension: balance_check_amount {
+    type: string
+    sql: ${TABLE}."BALANCE_CHECK_AMOUNT" ;;
+  }
+
   dimension: card_id {
     type: string
     sql: ${TABLE}."CARD_ID" ;;
@@ -56,6 +66,20 @@ view: payments {
     sql: ${TABLE}."FAILURE_REASON_DETAILED" ;;
   }
 
+  dimension_group: last_balance_check {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: ${TABLE}."LAST_BALANCE_CHECK_TS" ;;
+  }
+
   dimension_group: last_status_update_ts {
     type: time
     timeframes: [
@@ -89,6 +113,7 @@ view: payments {
     sql: ${TABLE}."LAST_UPDATE_TS" ;;
   }
 
+
   dimension: payment_amount {
     type: number
     sql: ${TABLE}."PAYMENT_AMOUNT" ;;
@@ -120,6 +145,11 @@ view: payments {
       WHEN ${account_available_balance_to_payment_amount_ratio} <= 2 THEN 'b. 1-2'
       WHEN ${account_available_balance_to_payment_amount_ratio} > 2 THEN 'c. 2+'
     END ;;
+  }
+
+  dimension: partial_payment_ind {
+    type: yesno
+    sql: ${TABLE}."PARTIAL_PAYMENT_IND" ;;
   }
 
   dimension: payment_hold_days {
@@ -273,6 +303,22 @@ view: payments {
   dimension: plaid_processor_token_valid {
     type: yesno
     sql: ${plaid_processor_token} IS NOT NULL ;;
+  }
+
+
+  dimension: plaid_risk_assessment {
+    type: yesno
+    sql: ${TABLE}."PLAID_RISK_ASSESSMENT" ;;
+  }
+
+  dimension: plaid_risk_reasons {
+    type: yesno
+    sql: ${TABLE}."PLAID_RISK_REASONS" ;;
+  }
+
+  dimension: plaid_risk_score {
+    type: number
+    sql: ${TABLE}."PLAID_RISK_SCORE" ;;
   }
 
   dimension: processor {
