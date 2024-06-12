@@ -17,10 +17,6 @@ explore: payments {
     sql_on: ${payments.user_id} = ${user_profile.user_id} ;;
     relationship: one_to_many
   }
-
-  always_filter: {
-    filters: [payments.payment_initiated_ts_date: "after 1 month ago", user_profile.testing_stage: "Rollout"]
-  }
 }
 
 explore: payment_sources {
