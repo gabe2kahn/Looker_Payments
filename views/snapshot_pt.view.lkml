@@ -197,6 +197,6 @@ view: snapshot_pt {
 
   measure: open_accounts {
     type: count_distinct
-    sql: CASE WHEN ${account_closed_date} IS NULL THEN ${user_id} END ;;
+    sql: CASE WHEN ${account_closed_date} IS NULL and ${chargeoff_date} IS NULL THEN ${user_id} END ;;
   }
 }
