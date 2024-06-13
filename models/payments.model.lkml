@@ -4,7 +4,7 @@ include: "/views/*.view"
 
 datagroup: payments_default_datagroup {
   # sql_trigger: SELECT MAX(id) FROM etl_log;;
-  max_cache_age: "1 hour"
+  max_cache_age: "24 hours"
 }
 
 persist_with: payments_default_datagroup
