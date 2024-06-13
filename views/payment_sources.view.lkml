@@ -87,8 +87,8 @@ view: payment_sources {
     type: count_distinct
     sql: CASE WHEN ${source_created_ts_date} <= ${snapshot_pt.snap_date}
       and COALESCE(${source_deleted_ts_date},'3000-01-01') > ${snapshot_pt.snap_date}
-      and ${snapshot_pt.account_closed_date} IS NULL THEN ${user_id}  END ;;
-
+      and ${snapshot_pt.account_closed_date} IS NULL THEN ${user_id}  END
+      and ${account_type} NOT IN ('debit-card-v2','debit-card') ;;
   }
 
   measure: active_access_token_payment_sources {
