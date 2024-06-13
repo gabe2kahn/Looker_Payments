@@ -87,7 +87,7 @@ view: payment_sources {
     type: count_distinct
     sql: CASE WHEN ${source_created_ts_date} <= ${snapshot_pt.snap_date}
       and COALESCE(${source_deleted_ts_date},'3000-01-01') > ${snapshot_pt.snap_date}
-      and lower(${user_profile.activity_status}) != 'closed' THEN ${user_id}  END ;;
+      and lower(${user_profile.activity_status}) NOT IN ('closed','charged-off','bankruptcy') THEN ${user_id}  END ;;
 
   }
 
