@@ -87,7 +87,7 @@ view: payment_sources {
     type: count_distinct
     sql: CASE WHEN ${source_created_ts_date} <= ${snapshot_pt.snap_date}
       and COALESCE(${source_deleted_ts_date},'3000-01-01') > ${snapshot_pt.snap_date}
-      and ${snapshot_pt.account_closed_date} IS NULL
+      and ${snapshot_pt.account_closed_date} IS NULL and ${snapshot_pt.chargeoff_date} IS NULL
       and ${account_type} NOT IN ('debit-card-v2','debit-card')
     THEN ${user_id}  END ;;
   }
@@ -105,7 +105,7 @@ view: payment_sources {
   measure: active_access_token_users {
     type: count_distinct
     sql: CASE WHEN ${access_token_active_ind} = 'TRUE'
-      and  ${snapshot_pt.account_closed_date} IS NULL
+      and ${snapshot_pt.account_closed_date} IS NULL and ${snapshot_pt.chargeoff_date} IS NULL
       and ${source_created_ts_date} <= ${snapshot_pt.snap_date}
       and COALESCE(${source_deleted_ts_date},'3000-01-01') > ${snapshot_pt.snap_date}
       and ${account_type} NOT IN ('debit-card-v2','debit-card')
