@@ -33,6 +33,11 @@ view: payments {
     sql: ${TABLE}."CARD_ID" ;;
   }
 
+  dimension: canceled_reason {
+    type: string
+    sql: ${TABLE}."CANCELED_REASON" ;;
+  }
+
   dimension: business_days_to_payment_failure {
     type: number
     sql: CASE WHEN ${payment_status} = 'failed' THEN (
@@ -407,7 +412,10 @@ view: payments {
 
   measure: balance_check_canceled_payments {
     type: count_distinct
-    sql: CASE WHEN ${payment_status} = 'canceled-for-balance' THEN ${payment_id} END;;
+    sql: CASE
+      WHEN ${payment_status} = 'canceled-for-balance' THEN ${payment_id}
+      WHEN ${canceled_reason} = 'balance' THEN ${payment_id}
+    END;;
   }
 
   measure: average_days_to_payment_failure {
