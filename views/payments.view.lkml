@@ -41,10 +41,10 @@ view: payments {
   dimension: business_days_to_payment_failure {
     type: number
     sql: CASE WHEN ${payment_status} = 'failed' THEN (
-      DATEDIFF(DAY, COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date}),${last_status_update_ts_date})
-    - DATEDIFF(WEEK, COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date}), ${last_status_update_ts_date})*2
-    - (CASE WHEN DAYNAME(COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date})) != 'Sun' THEN 1 ELSE 0 END)
-    + (CASE WHEN DAYNAME(${last_status_update_ts_date}) != 'Sat' THEN 1 ELSE 0 END)
+      DATEDIFF(DAY, COALESCE(${payment_initiated_by_galileo_date},${payment_initiated_date}),${last_status_update_date})
+    - DATEDIFF(WEEK, COALESCE(${payment_initiated_by_galileo_date},${payment_initiated_date}), ${last_status_update_date})*2
+    - (CASE WHEN DAYNAME(COALESCE(${payment_initiated_by_galileo_date},${payment_initiated_date})) != 'Sun' THEN 1 ELSE 0 END)
+    + (CASE WHEN DAYNAME(${last_status_update_date}) != 'Sat' THEN 1 ELSE 0 END)
     ) END ;;
     value_format_name: decimal_0
   }
@@ -57,7 +57,7 @@ view: payments {
   dimension: days_to_payment_failure {
     type: number
     sql: CASE WHEN ${payment_status} = 'failed' THEN
-      DATEDIFF(days,COALESCE(${payment_initiated_by_galileo_ts_date},${payment_initiated_ts_date}),${last_status_update_ts_date}) END;;
+      DATEDIFF(days,COALESCE(${payment_initiated_by_galileo_date},${payment_initiated_date}),${last_status_update_date}) END;;
     value_format_name: decimal_0
   }
 
@@ -85,7 +85,7 @@ view: payments {
     sql: ${TABLE}."LAST_BALANCE_CHECK_TS" ;;
   }
 
-  dimension_group: last_status_update_ts {
+  dimension_group: last_status_update {
     type: time
     timeframes: [
       raw,
@@ -101,21 +101,7 @@ view: payments {
 
   dimension: last_status_update_date_name {
     type: string
-    sql: dayname(${last_status_update_ts_date});;
-  }
-
-  dimension_group: last_update_ts {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}."LAST_UPDATE_TS" ;;
+    sql: dayname(${last_status_update_date});;
   }
 
 
@@ -173,7 +159,7 @@ view: payments {
     sql: ${TABLE}."PAYMENT_ID" ;;
   }
 
-  dimension_group: payment_initiated_ts {
+  dimension_group: payment_initiated {
     type: time
     timeframes: [
       raw,
@@ -187,7 +173,7 @@ view: payments {
     sql: CAST(${TABLE}."PAYMENT_INITIATED_TS" AS TIMESTAMP_NTZ) ;;
   }
 
-  dimension_group: payment_initiated_by_galileo_ts {
+  dimension_group: payment_initiated_by_galileo {
     type: time
     timeframes: [
       raw,
@@ -204,7 +190,7 @@ view: payments {
 
   dimension: payment_initiated_date_name {
     type: string
-    sql: dayname(${payment_initiated_ts_date});;
+    sql: dayname(${payment_initiated_date});;
   }
 
   dimension: payment_initiated_day_of_month {
@@ -222,7 +208,7 @@ view: payments {
     END;;
   }
 
-  dimension_group: payment_posted_ts {
+  dimension_group: payment_posted {
     type: time
     timeframes: [
       raw,
@@ -236,7 +222,7 @@ view: payments {
     sql: ${TABLE}."PAYMENT_POSTED_TS";;
   }
 
-  dimension_group: payment_rescheduled_at_ts {
+  dimension_group: payment_rescheduled_at {
     type: time
     timeframes: [
       raw,
@@ -250,7 +236,7 @@ view: payments {
     sql: ${TABLE}."PAYMENT_RESCHEDULED_AT_TS" ;;
   }
 
-  dimension_group: payment_rescheduled_for_date {
+  dimension_group: payment_rescheduled_for {
     type: time
     timeframes: [
       raw,
@@ -263,7 +249,7 @@ view: payments {
     sql: ${TABLE}."PAYMENT_RESCHEDULED_FOR_DATE" ;;
   }
 
-  dimension_group: payment_scheduled_at_ts {
+  dimension_group: payment_scheduled_at {
     type: time
     timeframes: [
       raw,
@@ -277,7 +263,7 @@ view: payments {
     sql: ${TABLE}."PAYMENT_SCHEDULED_AT_TS" ;;
   }
 
-  dimension_group: payment_scheduled_for_date {
+  dimension_group: payment_scheduled_for {
     type: time
     timeframes: [
       raw,
@@ -338,46 +324,6 @@ view: payments {
   dimension: retried_payment_id {
     type: number
     sql: ${TABLE}."RETRIED_PAYMENT_ID" ;;
-  }
-
-  dimension_group: statement_end_dt {
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}."STATEMENT_END_DT" ;;
-  }
-
-  dimension: statement_index {
-    type: number
-    sql: ${TABLE}."STATEMENT_INDEX" ;;
-  }
-
-  dimension_group: statement_start_dt {
-    type: time
-    timeframes: [
-      raw,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    convert_tz: no
-    datatype: date
-    sql: ${TABLE}."STATEMENT_START_DT" ;;
-  }
-
-  dimension: statment_balance {
-    type: number
-    sql: ${TABLE}."STATMENT_BALANCE" ;;
   }
 
   dimension: user_id {
@@ -459,13 +405,13 @@ view: payments {
 
   measure: average_time_to_first_successful_payment {
     type: average
-    sql: CASE WHEN ${payment_status} = 'succeeded' THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
+    sql: CASE WHEN ${payment_status} = 'succeeded' THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_date}) END;;
     value_format_name: decimal_1
   }
 
   measure: average_time_to_first_failed_payment {
     type: average
-    sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_ts_date}) END;;
+    sql: CASE WHEN ${payment_status} = 'failed' THEN DATEDIFF(days,${user_profile.application_approval_ts_date},${last_status_update_date}) END;;
     value_format_name: decimal_1
   }
 
