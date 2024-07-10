@@ -152,6 +152,11 @@ view: payments {
     END ;;
   }
 
+  dimension: parent_payment_id {
+    type: number
+    sql: ${TABLE}."PARENT_PAYMENT_ID" ;;
+  }
+
   dimension: partial_payment_ind {
     type: yesno
     sql: ${TABLE}."PARTIAL_PAYMENT_IND" ;;
@@ -310,7 +315,6 @@ view: payments {
     sql: ${plaid_processor_token} IS NOT NULL ;;
   }
 
-
   dimension: plaid_risk_assessment {
     type: yesno
     sql: ${TABLE}."PLAID_RISK_ASSESSMENT" ;;
@@ -329,6 +333,11 @@ view: payments {
   dimension: processor {
     type: string
     sql: ${TABLE}."PROCESSOR" ;;
+  }
+
+  dimension: retried_payment_id {
+    type: number
+    sql: ${TABLE}."RETRIED_PAYMENT_ID" ;;
   }
 
   dimension_group: statement_end_dt {
