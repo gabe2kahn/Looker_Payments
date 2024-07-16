@@ -248,11 +248,11 @@ view: payments {
       WHEN ${payment_status} = 'succeeded'
         AND ${previous_date_snapshot.overdue_ind} = False
         AND ${payment_date_snapshot.overdue_ind} = False
-      THEN 'Current at time of payment'
+      THEN 'Success - Current at time of payment'
       WHEN ${payment_status} = 'succeeded'
         AND ${previous_date_snapshot.overdue_ind} = True
         AND ${payment_date_snapshot.overdue_ind} = True
-      THEN 'Success no cure'
+      THEN 'Success - no cure'
       WHEN ${payment_status} IN ('canceled-for-balance','failed') THEN 'Payment Failed'
       WHEN ${payment_status} IN ('pending','rescheduled') THEN 'Payment Pending'
       END ;;
