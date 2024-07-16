@@ -238,6 +238,26 @@ view: payments {
     sql: ${TABLE}."PAYMENT_POSTED_TS";;
   }
 
+  dimension: payment_overdue_impact {
+    type: string
+    sql: CASE
+      WHEN ${payment_status} = 'succeeded'
+        AND ${previous_date_snapshot.overdue_ind} = True
+        AND ${payment_date_snapshot.overdue_ind} = False
+      THEN 'Cured'
+      WHEN ${payment_status} = 'succeeded'
+        AND ${previous_date_snapshot.overdue_ind} = False
+        AND ${payment_date_snapshot.overdue_ind} = False
+      THEN 'Current at time of payment'
+      WHEN ${payment_status} = 'succeeded'
+        AND ${previous_date_snapshot.overdue_ind} = True
+        AND ${payment_date_snapshot.overdue_ind} = True
+      THEN 'Success no cure'
+      WHEN ${payment_status} IN ('canceled-for-balance','failed') THEN 'Payment Failed'
+      WHEN ${payment_status} IN ('pending','rescheduled') THEN 'Payment Pending'
+      END ;;
+  }
+
   dimension_group: payment_rescheduled_at {
     type: time
     timeframes: [
