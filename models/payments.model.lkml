@@ -17,6 +17,22 @@ explore: payments {
     sql_on: ${payments.user_id} = ${user_profile.user_id} ;;
     relationship: one_to_many
   }
+
+  join: payment_date_snapshot {
+    from:  snapshot_pt
+    type: inner
+    sql_on: ${payments.user_id} = ${payment_date_snapshot.user_id}
+      and ${payments.payment_scheduled_for_date} = ${payment_date_snapshot.snap_date} ;;
+    relationship: one_to_many
+  }
+
+  join: previous_date_snapshot {
+    from: snapshot_pt
+    type: inner
+    sql_on: ${payments.user_id} = ${previous_date_snapshot.user_id}
+      and ${payments.payment_scheduled_for_date} = DATEADD(DAYS,1,${previous_date_snapshot.snap_date}) ;;
+    relationship: one_to_many
+  }
 }
 
 explore: payment_sources {

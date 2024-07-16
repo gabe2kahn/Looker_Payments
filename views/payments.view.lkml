@@ -148,6 +148,22 @@ view: payments {
     sql: ${TABLE}."PARTIAL_PAYMENT_IND" ;;
   }
 
+  dimension: partials_test_ind {
+    type: string
+    sql: CASE
+      WHEN ${payment_method} = 'ACH'
+        AND ${payment_scheduled_for_date} >= '2024-07-09'
+        AND ${payment_initiated_date} IS NOT NULL
+        AND ${payment_id} % 2 = 1
+      THEN True
+      WHEN ${payment_method} = 'ACH'
+        AND ${payment_scheduled_for_date} >= '2024-07-09'
+        AND ${payment_initiated_date} IS NOT NULL
+        AND ${payment_id} % 2 = 0
+      THEN False
+    END;;
+  }
+
   dimension: payment_hold_days {
     type: number
     sql: ${TABLE}."PAYMENT_HOLD_DAYS" ;;
@@ -353,6 +369,15 @@ view: payments {
   measure: successful_payments {
     type: count_distinct
     sql: CASE WHEN ${payment_status} = 'succeeded' THEN ${payment_id} END;;
+  }
+
+  measure: cured_overdue_payments {
+    type: count_distinct
+    sql: CASE
+      WHEN ${payment_status} = 'succeeded'
+        AND ${previous_date_snapshot.overdue_ind} = True
+        AND ${payment_date_snapshot.overdue_ind} = False
+      THEN ${payment_id} END ;;
   }
 
   measure: pending_payments {
