@@ -155,12 +155,12 @@ view: payments {
         AND ${payment_scheduled_for_date} >= '2024-07-09'
         AND ${payment_initiated_date} IS NOT NULL
         AND ${payment_id} % 2 = 1
-      THEN True
+      THEN 'No Partials'
       WHEN ${payment_method} = 'ACH'
         AND ${payment_scheduled_for_date} >= '2024-07-09'
         AND ${payment_initiated_date} IS NOT NULL
         AND ${payment_id} % 2 = 0
-      THEN False
+      THEN 'Partials'
     END;;
   }
 
