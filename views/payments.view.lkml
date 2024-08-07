@@ -391,6 +391,11 @@ view: payments {
     sql: CASE WHEN ${payment_status} = 'succeeded' THEN ${payment_id} END;;
   }
 
+  measure: initiated_ach_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_initiated_raw} IS NOT NULL AND ${payment_method} = 'ACH' THEN ${payment_id} END;;
+  }
+
   measure: cured_overdue_payments {
     type: count_distinct
     sql: CASE
@@ -408,6 +413,17 @@ view: payments {
   measure: rescheduled_payments {
     type: count_distinct
     sql: CASE WHEN ${payment_status} = 'rescheduled' THEN ${payment_id} END;;
+  }
+
+  measure: ever_rescheduled_payments {
+    type: count_distinct
+    sql: CASE WHEN ${payment_rescheduled_at_raw} IS NOT NULL THEN ${payment_id} END;;
+  }
+
+  measure: ever_rescheduled_rate {
+    type: number
+    sql: ${ever_rescheduled_payments}/${initiated_ach_payments} END;;
+    value_format_name: percent_1
   }
 
   measure: balance_check_canceled_payments {
