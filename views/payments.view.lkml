@@ -422,7 +422,7 @@ view: payments {
 
   measure: ever_rescheduled_rate {
     type: number
-    sql: ${ever_rescheduled_payments}/${initiated_ach_payments} END;;
+    sql: ${ever_rescheduled_payments}/${initiated_ach_payments} ;;
     value_format_name: percent_1
   }
 
