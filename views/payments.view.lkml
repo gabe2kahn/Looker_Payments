@@ -152,12 +152,12 @@ view: payments {
     type: string
     sql: CASE
       WHEN ${payment_method} = 'ACH'
-        AND ${payment_scheduled_for_date} between '2024-07-09' and '2024-07-25'
+        AND (${payment_scheduled_for_date} between '2024-07-09' and '2024-07-25' or ${payment_scheduled_for_date} >= '2024-08-14')
         AND ${payment_initiated_date} IS NOT NULL
         AND ${payment_id} % 2 = 1
       THEN 'No Partials'
       WHEN ${payment_method} = 'ACH'
-        AND ${payment_scheduled_for_date} between '2024-07-09' and '2024-07-25'
+        AND (${payment_scheduled_for_date} between '2024-07-09' and '2024-07-25' or ${payment_scheduled_for_date} >= '2024-08-14')
         AND ${payment_initiated_date} IS NOT NULL
         AND ${payment_id} % 2 = 0
       THEN 'Partials'
